@@ -59,12 +59,25 @@ namespace FileManager1
             }
             else
             {
-                Process.Start(textBox1.Text) ;
+                Process.Start(textBox1.Text);
             }
             
 
         }
 
-        
+        private void listBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+            Button delete = new Button();
+            delete.Text = "Delete";
+            delete.Size = new Size(60, 20);
+            textBox1.Text = Cursor.Position.X +" "+ Cursor.Position.Y;
+            delete.Location = new Point(Cursor.Position.X, Cursor.Position.Y);
+            this.Controls.Add(delete);
+            delete.Click += new EventHandler(del_Click);
+        }
+        private void del_Click(object sender, EventArgs e)
+        {
+            File.Delete(textBox1.Text+"\\"+ listBox1.SelectedItem.ToString());
+        }
     }
 }
