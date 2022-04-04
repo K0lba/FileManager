@@ -32,16 +32,19 @@ namespace FileManager1
         }
 
         private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            
+        {   
             textBox1.Text= textBox1.Text+ "\\" +listBox1.SelectedItem.ToString();
-             
-            if (Path.GetExtension(textBox1.Text) == "")
+            if (File.Exists(textBox1.Text))
             {
                 
+                Process.Start(new ProcessStartInfo(textBox1.Text) { UseShellExecute = true});
+            }
+            else
+            { 
                 listBox1.Items.Clear();
 
                 DirectoryInfo DIR = new DirectoryInfo(textBox1.Text);
+           
                 DirectoryInfo[] DIRS = DIR.GetDirectories();
 
                 foreach (DirectoryInfo currentdir in DIRS)
@@ -56,28 +59,11 @@ namespace FileManager1
                     listBox1.Items.Add(file.Name);
 
                 }
-            }
-            else
-            {
-                Process.Start(textBox1.Text);
-            }
-            
+           
+            }  
 
         }
 
-        private void listBox1_MouseClick(object sender, MouseEventArgs e)
-        {
-            Button delete = new Button();
-            delete.Text = "Delete";
-            delete.Size = new Size(60, 20);
-            textBox1.Text = Cursor.Position.X +" "+ Cursor.Position.Y;
-            delete.Location = new Point(Cursor.Position.X, Cursor.Position.Y);
-            this.Controls.Add(delete);
-            delete.Click += new EventHandler(del_Click);
-        }
-        private void del_Click(object sender, EventArgs e)
-        {
-            File.Delete(textBox1.Text+"\\"+ listBox1.SelectedItem.ToString());
-        }
+        
     }
 }
