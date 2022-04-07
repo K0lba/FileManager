@@ -37,10 +37,13 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBox1
             // 
+            this.listBox1.AllowDrop = true;
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 20;
             this.listBox1.Location = new System.Drawing.Point(12, 54);
@@ -48,6 +51,9 @@
             this.listBox1.Size = new System.Drawing.Size(593, 384);
             this.listBox1.TabIndex = 0;
             this.listBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseClick);
+            this.listBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.listBox1_DragDrop);
+            this.listBox1.DragEnter += new System.Windows.Forms.DragEventHandler(this.listBox1_DragEnter);
+            this.listBox1.DragLeave += new System.EventHandler(this.listBox1_DragLeave);
             this.listBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDoubleClick);
             // 
             // textBox1
@@ -98,7 +104,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(637, 54);
+            this.button4.Location = new System.Drawing.Point(637, 76);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(64, 64);
             this.button4.TabIndex = 7;
@@ -108,7 +114,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(637, 140);
+            this.button5.Location = new System.Drawing.Point(637, 174);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(64, 64);
             this.button5.TabIndex = 8;
@@ -124,12 +130,34 @@
             this.button6.TabIndex = 9;
             this.button6.Text = "🖋\r\n\r\n";
             this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(637, 267);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(64, 64);
+            this.button3.TabIndex = 10;
+            this.button3.Text = "📑";
+            this.button3.UseVisualStyleBackColor = true;
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(637, 365);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(64, 64);
+            this.button7.TabIndex = 11;
+            this.button7.Text = "↔";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1342, 450);
+            this.Controls.Add(this.button7);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
@@ -157,5 +185,7 @@
         private Button button4;
         private Button button5;
         private Button button6;
+        private Button button3;
+        private Button button7;
     }
 }

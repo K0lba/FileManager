@@ -13,8 +13,6 @@ namespace FileManager1
         {
             InitializeComponent();
             Init();
-
-
         }
         private void Init()
         {
@@ -210,14 +208,16 @@ namespace FileManager1
                     {
                         zip.AddFile(delname2);
                         zipfile2 = delname2.Remove(delname2.Length - 4); // Кладем в архив одиночный файл
+                        res = listBox2.SelectedItem.ToString().Remove(listBox2.SelectedItem.ToString().Length - 4) + ".zip";
                     }
 
                     else
                     {
                         zip.AddDirectory(delname2);
                         zipfile2 = delname2;
+                        res = listBox2.SelectedItem.ToString() + ".zip";
                     }
-                    res = zipfile2 + ".zip";
+                    
                     zip.Save(zipfile2 + ".zip");
                 }
                 listBox2.Items.Add(res);
@@ -262,6 +262,75 @@ namespace FileManager1
                 string del2 = textBox2.Text + "\\" + listBox2.SelectedItem.ToString();
                 DelName2 = del2;
             }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Form2 form;
+            if (listBox1.SelectedItem != null)
+            {
+                form = new Form2(DelName, textBox1.Text,listBox1,listBox2,1) ;
+                form.Show();
+                
+                
+            }
+            else if (listBox2.SelectedItem != null)
+            {
+                form = new Form2(DelName2,textBox2.Text,listBox1,listBox2,2);
+                form.Show();   
+            }
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Form3 form;
+            if(listBox1.SelectedItem != null)
+            {
+                form = new Form3(DelName, listBox1.SelectedItem.ToString(),listBox1);
+                form.Show();
+            }
+            else if(listBox2.SelectedItem != null)
+            {
+                form = new Form3(DelName2, listBox2.SelectedItem.ToString(), listBox2);
+                form.Show();
+            }
+        }
+
+
+
+        private void listBox1_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+        }
+
+        private void listBox1_DragOver(object sender, DragEventArgs e)
+        {
+            string file = e.Data.GetData(DataFormats.FileDrop).ToString();
+            listBox1.Items.Add(file);
+        }
+
+        private void listBox1_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] file = (string[])e.Data.GetData(DataFormats.FileDrop);
+            File.Move(file[0], textBox1.Text + '\\'+ GetName(file[0]));
+            listBox1.Items.Add( GetName(file[0]));
+        }
+
+        private void listBox1_DragLeave(object sender, EventArgs e)
+        {
+
+        }
+
+        private string GetName(string path)
+        {
+            string name="";
+            var strings = path.Split('\\');
+            name = strings[strings.Length-1];
+            return name;
         }
     }
 }
