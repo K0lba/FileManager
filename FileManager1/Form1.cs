@@ -8,6 +8,7 @@ namespace FileManager1
     public partial class Form1 : Form
     {
         private string DelName;
+        private string DelName2;
         public Form1()
         {
             InitializeComponent();
@@ -170,7 +171,7 @@ namespace FileManager1
         {
             if (listBox2.SelectedItem != null)
             {
-                File.Delete(DelName);
+                File.Delete(DelName2);
                 listBox2.Items.RemoveAt(listBox2.SelectedIndex);
 
 
@@ -190,11 +191,6 @@ namespace FileManager1
                 string del= textBox1.Text + "\\" + listBox1.SelectedItem.ToString();
                 DelName = del;
             }
-            else if(listBox2.SelectedItem != null)
-            {
-                string del = textBox2.Text + "\\" + listBox2.SelectedItem.ToString();
-                DelName = del;
-            }
             
         }
 
@@ -202,23 +198,70 @@ namespace FileManager1
         {
             if (listBox2.SelectedItem != null)
             {
+                
+                string delname2 = DelName2;
+                string res;
+                string zipfile2;
+                Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+                using (ZipFile zip = new ZipFile(Encoding.UTF8))
+                {
+                    zip.CompressionLevel = Ionic.Zlib.CompressionLevel.BestSpeed;
+                    if (delname2 is File)
+                    {
+                        zip.AddFile(delname2);
+                        zipfile2 = delname2.Remove(delname2.Length - 4); // Кладем в архив одиночный файл
+                    }
+
+                    else
+                    {
+                        zip.AddDirectory(delname2);
+                        zipfile2 = delname2;
+                    }
+                    res = zipfile2 + ".zip";
+                    zip.Save(zipfile2 + ".zip");
+                }
+                listBox2.Items.Add(res);
 
             }
             else if (listBox1.SelectedItem != null)
             {
 
                 string delname = DelName;
+                string res;
+                string zipfile;
                 Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
                 using (ZipFile zip = new ZipFile(Encoding.UTF8))
                 {
                     zip.CompressionLevel = Ionic.Zlib.CompressionLevel.BestSpeed;
-                    zip.AddFile(delname); // Кладем в архив одиночный файл
-                    string zipfile = delname.Remove(delname.Length - 4); //Обрезаем расширение файла
+                    if(File.Exists(delname))
+                    {
+                        zip.AddFile(delname);
+                        zipfile = delname.Remove(delname.Length - 4); // Кладем в архив одиночный файл
+                        res = listBox1.SelectedItem.ToString().Remove(listBox1.SelectedItem.ToString().Length - 4) + ".zip";
+                    }
+
+                    else
+                    {
+                        zip.AddDirectory(delname);
+                        zipfile = delname;
+                        res = listBox1.SelectedItem.ToString() + ".zip";
+                    }
+
+                    //Обрезаем расширение файла
                     zip.Save(zipfile + ".zip");
                 }
-                listBox1.Items.Add(DelName);
+                listBox1.Items.Add(res);
             }
 
+        }
+
+        private void listBox2_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (listBox2.SelectedItem != null)
+            {
+                string del2 = textBox2.Text + "\\" + listBox2.SelectedItem.ToString();
+                DelName2 = del2;
+            }
         }
     }
 }
