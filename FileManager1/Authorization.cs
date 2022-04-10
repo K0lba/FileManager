@@ -9,52 +9,83 @@ namespace FileManager1
 {
     public class Authorization
     {
-        public string Login { get; set; }
-        public string Password { get; set; }  
+        public static Authorization GetSettings()
+        {
+            Authorization settings = null;
+            string filename = "log.xml";
 
-        public Authorization()
-        {    
-            Authorization authorization = null;
-            if (File.Exists("log.xml"))
+            //проверка наличия файла
+            if (File.Exists(filename))
             {
-                using (FileStream fs = new FileStream("log.xml", FileMode.Open))
+                using (FileStream fs = new FileStream(filename, FileMode.Open))
                 {
                     XmlSerializer xser = new XmlSerializer(typeof(Authorization));
-                    authorization = (Authorization)xser.Deserialize(fs);
+                    settings = (Authorization)xser.Deserialize(fs);
                     fs.Close();
                 }
             }
             else
             {
-                new FileStream("log.xml", FileMode.Create);
-                authorization = new Authorization();
+                settings = new Authorization();
             }
 
-            /*var xmlFormater = new XmlSerializer(typeof(Authorization));
-            using (var file = new FileStream("log.xml", FileMode.OpenOrCreate))
-            {
-                xmlFormater.Serialize(file, this);
-            }
-            using (var file = new FileStream("log.xml", FileMode.OpenOrCreate))
-            {
-               var newData = xmlFormater.Deserialize(file) as Authorization;
-                
-            }*/
+            return settings;
         }
+
+
         public void Save()
         {
             string filename = "log.xml";
-
             if (File.Exists(filename)) File.Delete(filename);
-
-
+            XmlSerializer xser = new XmlSerializer(typeof(Authorization));
             using (FileStream fs = new FileStream(filename, FileMode.Create))
             {
-                XmlSerializer xser = new XmlSerializer(typeof(Authorization));
                 xser.Serialize(fs, this);
                 fs.Close();
             }
         }
+
+        public string Login { get; set; }
+
+        public string Password { get; set; }
+
+        public void SetLogin(string text)
+        {
+            Login = Crypter.Encrypt(text);
+        }
+        public string GetLogin()
+        {
+            string res;
+            try
+            {
+                res = Crypter.Decrypt(Login);
+            }
+            catch
+            {
+                res = Login;
+            }
+            return res;
+        }
+        public void SetPassword(string text)
+        {
+            Password = Crypter.Encrypt(text);
+        }
+        public string GetPassword()
+        {
+            string res;
+            try
+            {
+                res = Crypter.Decrypt(Password);
+            }
+            catch
+            {
+                res = Password;
+            }
+            return res;
+        }
+
+
+
 
     }
 }

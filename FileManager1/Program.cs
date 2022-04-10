@@ -13,12 +13,14 @@ namespace FileManager1
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Application.Run(new StartForm());
 
-            Authorization au = new Authorization();
-            au.Login = "cum";
-            au.Password = "password";
-            au.Save();
+            /*
+            Authorization settings = null;
+            settings = Authorization.GetSettings();
+            settings.SetLogin("cum");
+            settings.Save();*/
+
         }
     }
 }
