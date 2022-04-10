@@ -1,3 +1,5 @@
+using System.Xml.Serialization;
+
 namespace FileManager1
 {
     internal static class Program
@@ -12,6 +14,11 @@ namespace FileManager1
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());
+
+            Authorization au = new Authorization();
+            au.Login = "cum";
+            au.Password = "password";
+            au.Save();
         }
     }
 }

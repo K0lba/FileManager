@@ -332,5 +332,10 @@ namespace FileManager1
             name = strings[strings.Length-1];
             return name;
         }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
