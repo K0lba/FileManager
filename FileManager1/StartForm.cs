@@ -24,8 +24,11 @@ namespace FileManager1
 
         private void button1_Click(object sender, EventArgs e)
         {
+            this.Hide();
+            Form1 frm = new Form1();
+            frm.Show();
             
-            settings.SetLogin(textBox1.Text);
+            /*settings.SetLogin(textBox1.Text);
             settings.SetPassword(textBox2.Text);
             settings.Save();
 
@@ -34,7 +37,7 @@ namespace FileManager1
             th = new Thread(Open);
             th.SetApartmentState(ApartmentState.STA);
             th.Start();
-
+*/
         }
         private void Open(object obj)
         {
