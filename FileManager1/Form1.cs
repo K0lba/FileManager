@@ -337,9 +337,9 @@ namespace FileManager1
             return name;
         }
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-
+            Application.Exit();
         }
     }
 }
