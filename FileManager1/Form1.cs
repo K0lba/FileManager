@@ -341,5 +341,23 @@ namespace FileManager1
         {
             Application.Exit();
         }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if(listBox1.SelectedItem != null)
+            {
+                if (File.Exists(DelName))
+                {
+                    File.Copy(DelName, textBox1.Text+"\\"+"copy"+Path.GetExtension(DelName));
+                    listBox1.Items.Add("copy" + Path.GetExtension(DelName));
+                }
+                else
+                {
+                    
+                }
+            }
+            
+
+        }
     }
 }
