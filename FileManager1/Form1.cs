@@ -169,14 +169,18 @@ namespace FileManager1
         {
             if (listBox2.SelectedItem != null)
             {
-                File.Delete(DelName2);
+                if (File.Exists(DelName2))
+                    File.Delete(DelName2);
+                else Directory.Delete(DelName2);
                 listBox2.Items.RemoveAt(listBox2.SelectedIndex);
 
 
             }
             else if (listBox1.SelectedItem != null)
-            { 
-                File.Delete(DelName);
+            {
+                if (File.Exists(DelName))
+                    File.Delete(DelName);
+                else Directory.Delete(DelName);
                 listBox1.Items.RemoveAt(listBox1.SelectedIndex);
             }
             

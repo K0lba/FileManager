@@ -20,6 +20,7 @@ namespace FileManager1
             settings = Authorization.GetSettings();
             textBox1.Text = settings.GetLogin();
             textBox2.Text = settings.GetPassword();
+
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -28,16 +29,16 @@ namespace FileManager1
             Form1 frm = new Form1();
             frm.Show();
             
-            /*settings.SetLogin(textBox1.Text);
+            settings.SetLogin(textBox1.Text);
             settings.SetPassword(textBox2.Text);
             settings.Save();
 
 
-            Close();
+           /* Close();
             th = new Thread(Open);
             th.SetApartmentState(ApartmentState.STA);
-            th.Start();
-*/
+            th.Start();*/
+
         }
         private void Open(object obj)
         {
