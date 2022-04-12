@@ -348,15 +348,94 @@ namespace FileManager1
             {
                 if (File.Exists(DelName))
                 {
-                    File.Copy(DelName, textBox1.Text+"\\"+"copy"+Path.GetExtension(DelName));
-                    listBox1.Items.Add("copy" + Path.GetExtension(DelName));
+                    if(File.Exists(textBox1.Text + "\\" + "copy" + Path.GetExtension(DelName)))
+                    {
+                        int i = 1;
+                        while(File.Exists(textBox1.Text + "\\" + "copy" +" "+ i + Path.GetExtension(DelName)))
+                        {
+                            i++;
+                        }
+                        File.Copy(DelName, textBox1.Text + "\\" + "copy" + " " + i + Path.GetExtension(DelName));
+                        listBox1.Items.Add("copy" + " " + i + Path.GetExtension(DelName));
+                    }
+                    else
+                    {
+                        File.Copy(DelName, textBox1.Text+"\\"+"copy"+Path.GetExtension(DelName));
+                        listBox1.Items.Add("copy" + Path.GetExtension(DelName));
+                    }
+                        
                 }
                 else
                 {
-                    
+                    if (Directory.Exists(textBox1.Text + "\\" + "copy"))
+                    {
+                        int i = 1;
+                        while (Directory.Exists(textBox1.Text + "\\" + "copy" + " " + i))
+                        {
+                            i++;
+                        }
+                        CopyDir(DelName, textBox1.Text + "\\" + "copy" + " " + i);
+                        listBox1.Items.Add("copy" + " " + i);
+                    }
+                    else
+                    {
+                        CopyDir(DelName, textBox1.Text + "\\" + "copy");
+                        listBox1.Items.Add("copy");
+                    }
+
                 }
             }
             
+
+        }
+        private void CopyDir(string FromDir, string ToDir)
+        {
+            Directory.CreateDirectory(ToDir);
+            foreach (string s1 in Directory.GetFiles(FromDir))
+            {
+                string s2 = ToDir + "\\" + Path.GetFileName(s1);
+                File.Copy(s1, s2);
+            }
+            foreach (string s in Directory.GetDirectories(FromDir))
+            {
+                CopyDir(s, ToDir + "\\" + Path.GetFileName(s));
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text[textBox1.Text.Length - 1] == '\\')
+            {
+                textBox1.Text = textBox1.Text.Remove(textBox1.Text.Length - 1, 1);
+                while(textBox1.Text[textBox1.Text.Length-1] != '\\')
+                {
+                    textBox1.Text = textBox1.Text.Remove(textBox1.Text.Length - 1, 1);
+                }
+            }
+            else if(textBox1.Text[textBox1.Text.Length - 1] != '\\')
+            {
+                while (textBox1.Text[textBox1.Text.Length-1] != '\\')
+                {
+                    textBox1.Text = textBox1.Text.Remove(textBox1.Text.Length - 1, 1);
+                }
+            }
+            textBox1.Text = textBox1.Text.Remove(textBox1.Text.Length - 1, 1);
+            listBox1.Items.Clear();
+            DirectoryInfo DIR = new DirectoryInfo(textBox1.Text);
+            DirectoryInfo[] DIRS = DIR.GetDirectories();
+
+            foreach (DirectoryInfo currentdir in DIRS)
+            {
+                listBox1.Items.Add(currentdir.Name);
+            }
+
+            FileInfo[] FILES = DIR.GetFiles();
+
+            foreach (FileInfo file in FILES)
+            {
+                listBox1.Items.Add(file.Name);
+
+            }
 
         }
     }
