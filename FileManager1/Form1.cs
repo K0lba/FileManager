@@ -7,12 +7,14 @@ namespace FileManager1
 {
     public partial class Form1 : Form
     {
+        Authorization setting;
         private string DelName;
         private string DelName2;
-        public Form1()
+        public Form1(Authorization setting)
         {
             InitializeComponent();
             Init();
+            this.setting = setting;
         }
         private void Init()
         {
@@ -339,7 +341,11 @@ namespace FileManager1
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            
+            /*setting.Login = StartForm.textBox1.Text;
+            setting.Password = this.textBox2.Text;*/
             Application.Exit();
+            
         }
 
         private void button3_Click(object sender, EventArgs e)

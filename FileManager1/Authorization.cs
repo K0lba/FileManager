@@ -1,26 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace FileManager1
 {
+    [DataContract]
     public class Authorization
     {
+        [DataMember]
+        public string Login { get; set; }
+        [DataMember]
+        public string Password { get; set; }
+
+
         public static Authorization GetSettings()
         {
             Authorization settings = null;
-            string filename = "log.xml";
+            string filename = "log.json";
 
             //проверка наличия файла
             if (File.Exists(filename))
             {
                 using (FileStream fs = new FileStream(filename, FileMode.Open))
                 {
-                    XmlSerializer xser = new XmlSerializer(typeof(Authorization));
-                    settings = (Authorization)xser.Deserialize(fs);
+                    var xser = new DataContractJsonSerializer(typeof(Authorization));
+                    settings = (Authorization)xser.ReadObject(fs);
                     fs.Close();
                 }
             }
@@ -32,60 +41,32 @@ namespace FileManager1
             return settings;
         }
 
+        [OnSerializing()]
+        private void SetValuesOnSerializingMethod(StreamingContext context)
+        {
+            Login = Crypter.Encrypt(Login);
+            Password = Crypter.Encrypt(Password);
+        }
 
+        [OnDeserialized()]
+        internal void OnDeserializedMethodMethod(StreamingContext context)
+        {
+            Login = Crypter.Decrypt(Login);
+            Password = Crypter.Decrypt(Password);
+        }
         public void Save()
         {
-            string filename = "log.xml";
+            string filename = "log.json";
             if (File.Exists(filename)) File.Delete(filename);
-            XmlSerializer xser = new XmlSerializer(typeof(Authorization));
+            var xser = new DataContractJsonSerializer(typeof(Authorization));
             using (FileStream fs = new FileStream(filename, FileMode.Create))
             {
-                xser.Serialize(fs, this);
+                xser.WriteObject(fs, this);
                 fs.Close();
             }
         }
 
-        public string Login { get; set; }
-
-        public string Password { get; set; }
-
-        public void SetLogin(string text)
-        {
-            Login = Crypter.Encrypt(text);
-        }
-        public string GetLogin()
-        {
-            string res;
-            try
-            {
-                res = Crypter.Decrypt(Login);
-            }
-            catch
-            {
-                res = Login;
-            }
-            return res;
-        }
-        public void SetPassword(string text)
-        {
-            Password = Crypter.Encrypt(text);
-        }
-        public string GetPassword()
-        {
-            string res;
-            try
-            {
-                res = Crypter.Decrypt(Password);
-            }
-            catch
-            {
-                res = Password;
-            }
-            return res;
-        }
-
-
-
+        
 
     }
 }

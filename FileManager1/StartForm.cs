@@ -18,31 +18,20 @@ namespace FileManager1
         {
             InitializeComponent();
             settings = Authorization.GetSettings();
-            textBox1.Text = settings.GetLogin();
-            textBox2.Text = settings.GetPassword();
+            textBox1.Text = settings.Login;
+            textBox2.Text = settings.Password;
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             this.Hide();
-            Form1 frm = new Form1();
+            Form1 frm = new Form1(settings);
             frm.Show();
             
-            settings.SetLogin(textBox1.Text);
-            settings.SetPassword(textBox2.Text);
+            settings.Login = textBox1.Text;
+            settings.Password = textBox2.Text;
             settings.Save();
-
-
-           /* Close();
-            th = new Thread(Open);
-            th.SetApartmentState(ApartmentState.STA);
-            th.Start();*/
-
-        }
-        private void Open(object obj)
-        {
-            Application.Run(new Form1());
         }
     }
 }

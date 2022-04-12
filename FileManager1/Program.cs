@@ -15,12 +15,6 @@ namespace FileManager1
             ApplicationConfiguration.Initialize();
             Application.Run(new StartForm());
 
-            /*
-            Authorization settings = null;
-            settings = Authorization.GetSettings();
-            settings.SetLogin("cum");
-            settings.Save();*/
-
         }
     }
 }
