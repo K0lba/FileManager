@@ -40,6 +40,12 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.button9 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBox1
@@ -163,11 +169,80 @@
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Arial",
+            "Times New Roman",
+            "Impact",
+            "Courier New",
+            "Verdana"});
+            this.comboBox1.Location = new System.Drawing.Point(167, 460);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(153, 28);
+            this.comboBox1.TabIndex = 13;
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(360, 460);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(47, 27);
+            this.textBox3.TabIndex = 14;
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "Red",
+            "Blue",
+            "Yellow",
+            "Black",
+            "Green",
+            "Pink"});
+            this.comboBox2.Location = new System.Drawing.Point(441, 459);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(153, 28);
+            this.comboBox2.TabIndex = 15;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(24, 461);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(117, 20);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "Change settings:";
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(763, 462);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(0, 20);
+            this.linkLabel1.TabIndex = 17;
+            // 
+            // button9
+            // 
+            this.button9.Location = new System.Drawing.Point(624, 458);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(94, 29);
+            this.button9.TabIndex = 18;
+            this.button9.Text = "ok";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1342, 450);
+            this.ClientSize = new System.Drawing.Size(1345, 497);
+            this.Controls.Add(this.button9);
+            this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.comboBox2);
+            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button3);
@@ -202,5 +277,11 @@
         private Button button3;
         private Button button7;
         private Button button8;
+        private ComboBox comboBox1;
+        private TextBox textBox3;
+        private ComboBox comboBox2;
+        private Label label1;
+        private LinkLabel linkLabel1;
+        private Button button9;
     }
 }

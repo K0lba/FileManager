@@ -17,6 +17,14 @@ namespace FileManager1
         [DataMember]
         public string Password { get; set; }
 
+        [DataMember]
+        public int Size { get; set; }
+
+        [DataMember]
+        public Color Color { get; set; }
+
+        [DataMember]
+        public string Font { get; set; }
 
         public static Authorization GetSettings()
         {

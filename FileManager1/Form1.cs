@@ -8,13 +8,28 @@ namespace FileManager1
     public partial class Form1 : Form
     {
         Authorization setting;
+        TextBox textBox;
+        TextBox textBoxS;
         private string DelName;
         private string DelName2;
-        public Form1(Authorization setting)
+        Color color;
+        int size;
+        string font;
+        public Form1(Authorization setting, TextBox textBox, TextBox textBoxS, Color color, int size, string font)
         {
             InitializeComponent();
             Init();
             this.setting = setting;
+            this.textBox = textBox;
+            this.textBoxS = textBoxS;
+            this.size = size;
+            this.font = font;
+            this.color = color;
+            if( size!=null || font!=null)
+                this.Font = new Font(font,size);
+            if(color!=null)
+                this.BackColor = color;
+            
         }
         private void Init()
         {
@@ -341,9 +356,13 @@ namespace FileManager1
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            
-            /*setting.Login = StartForm.textBox1.Text;
-            setting.Password = this.textBox2.Text;*/
+            setting.Login = textBox.Text;
+            setting.Password = textBoxS.Text;
+            setting.Color = color;
+            setting.Size = size;
+            setting.Font = font;
+            setting.Save();
+
             Application.Exit();
             
         }
@@ -444,5 +463,42 @@ namespace FileManager1
             }
 
         }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            color = comboBox2.Text switch
+            {
+                "Red" => Color.Red,
+                "Blue" => Color.Blue,
+                "Yellow" => Color.Yellow,
+                "Black" => Color.Black,
+                "Green" => Color.Green,
+                "Pink" => Color.Pink,
+                _ => Color.White
+            };
+            
+            if(int.TryParse(textBox3.Text, out _))
+            {
+                if(Convert.ToInt32(textBox3.Text)>30 || Convert.ToInt32(textBox3.Text)<1)
+                {
+                    MessageBox.Show("Please, use int under 30  and more than 0");
+                }
+                else
+                {   
+                    font = comboBox1.Text;
+                    size = Convert.ToInt32(textBox3.Text);
+                    this.Font = new Font(comboBox1.Text, Convert.ToInt32(textBox3.Text),FontStyle.Regular);
+                    this.BackColor = color;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please, use int");
+            }
+
+            
+             
+        }
+
     }
 }
