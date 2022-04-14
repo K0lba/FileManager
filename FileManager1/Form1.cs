@@ -15,6 +15,7 @@ namespace FileManager1
         Color color;
         int size;
         string font;
+        //test string
         public Form1(Authorization setting, TextBox textBox, TextBox textBoxS, Color color, int size, string font)
         {
             InitializeComponent();
