@@ -18,24 +18,23 @@ namespace FileManager1
             progLang = comboBox1.Text;
             pages = Convert.ToInt32(textBox1.Text);
 
-            string g = "Python docodcko,Pythone ek";
-            Regex regex = new Regex(@"Python(\w*)");
-            MatchCollection matches = regex.Matches(g);
-            if (matches.Count > 0)
-            {
-                foreach (Match match in matches)
-                    listBox1.Items.Add(match.Value);
-            }
             WebClient client = new WebClient();
 
-            using (Stream stream = client.OpenRead("https://docs.microsoft.com/ru-ru/dotnet/api/system.net.webclient.openread?view=netframework-4.8"))
+            using (Stream stream = client.OpenRead("https://www.packtpub.com/catalogsearch/result/?q="+ comboBox1.Text))
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     string line = "";
                     while ((line = reader.ReadLine()) != null)
                     {
-                        listBox1.Items.Add(line.Normalize());
+                        Regex regex1 = new Regex(comboBox1.Text);
+                        MatchCollection matches1 = regex1.Matches(line);
+                        if (matches1.Count > 0)
+                        {
+                            foreach (Match match in matches1)
+                                 listBox1.Items.Add(match.Value);
+                        }
+                       
                     }
                 }
             }

@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AngleSharp" Version="0.16.1" />
     <PackageReference Include="Ionic.Zip" Version="1.9.1.8" />
     <PackageReference Include="Ionic.Zip-1.9.1.8" Version="1.9.1.8" />
     <PackageReference Include="System.Runtime.Serialization.Json" Version="4.3.0" />
@@ -41,7 +42,7 @@
     </None>
   </ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="System.Text.Encoding.CodePages" Version="4.3.0" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
 	</ItemGroup>
 
 </Project>
