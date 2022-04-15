@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AngleSharp.Html.Dom;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace FileManager1.Core
 {
     internal interface IParser<T> where T : class
     {
-        T Parser (HtmlDocument document);
+        T Parser (IHtmlDocument document);
     }
 }
