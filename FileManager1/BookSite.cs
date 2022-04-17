@@ -25,16 +25,19 @@ namespace FileManager1
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     string line = "";
-                    while ((line = reader.ReadLine()) != null)
+                    while ((line = reader.ReadLine()) != null || pages>0)
                     {
-                        listBox1.Items.Add(line);
-                        /*Regex regex1 = new Regex(comboBox1.Text);
+                        
+                        //Regex regex1 = new Regex(comboBox1.Text);
+                        Regex regex1 = new Regex("a href");
                         MatchCollection matches1 = regex1.Matches(line);
                         if (matches1.Count > 0)
                         {
-                            foreach (Match match in matches1)
-                                 listBox1.Items.Add(match.Value);
-                        }*/
+                            foreach (Match match in matches1){
+                                listBox1.Items.Add(line);
+                                pages--;
+                            }//listBox1.Items.Add(match.Value);                                        
+                        }
                        
                     }
                 }
