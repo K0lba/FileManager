@@ -14,6 +14,7 @@ namespace FileManager1
         public BookSite()
         {
             InitializeComponent();
+            listBox1.Items.Add("Dont touch");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -63,15 +64,23 @@ namespace FileManager1
 
         private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            var line = lines[listBox1.SelectedIndex].Split('"');
-            Process.Start(@"https://www.youtube.com");
-            //System.Diagnostics.Process.Start(line[1]);
-            using (FileStream file = new FileStream("C:\\Новая папка\\log.txt", FileMode.OpenOrCreate))
+            if(lines != null)
             {
-                byte[] buffer = Encoding.Default.GetBytes(lines[listBox1.SelectedIndex]);
-                file.WriteAsync(buffer);//
-                file.Close();
+                var line = lines[listBox1.SelectedIndex].Split('"');
+                Process.Start(new ProcessStartInfo(line[1]) { UseShellExecute = true });
+                using (FileStream file = new FileStream("C:\\Новая папка\\log.txt", FileMode.OpenOrCreate))
+                {
+                    byte[] buffer = Encoding.Default.GetBytes(lines[listBox1.SelectedIndex]);
+                    file.WriteAsync(buffer);//
+                    file.Close();
+                }
+
             }
+                
+            if(listBox1.SelectedItem.ToString() == "Dont touch")
+                Process.Start(new ProcessStartInfo(@"https://www.youtube.com/watch?v=DLzxrzFCyOs&ab_channel=AllKindsOfStuff") { UseShellExecute = true });
+            //System.Diagnostics.Process.Start(line[1]);
+            
                 
         }
     }
