@@ -19,7 +19,8 @@ namespace FileManager1.Core
         }
         public async Task<string> GetSourceByPage(int id)
         {
-            var currentUrl = url.Replace("{CurrentId}",id.ToString());
+            var currentUrl = url;
+                //.Replace("{CurrentId}",id.ToString());
             var response = await client.GetAsync(currentUrl);
             string source = null;
 

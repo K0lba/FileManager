@@ -14,7 +14,8 @@ namespace FileManager1.Core.Habra
         public string[] Parser(IHtmlDocument document)
         {
             var list = new List<string>();
-            var items = document.QuerySelectorAll("a").Where(items => items.ClassName != null && items.ClassName.Contains("post_title_link"));
+            var items = document.QuerySelectorAll("p");
+                //.Where(items => items.ClassName != null && items.ClassName.Contains("post_title_link"));
 
             foreach (var item in items)
             {
