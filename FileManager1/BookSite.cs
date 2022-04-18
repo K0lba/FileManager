@@ -23,7 +23,7 @@ namespace FileManager1
             progLang = comboBox1.Text;
             pages = Convert.ToInt32(textBox1.Text);
             int ind = 0;
-            int count = 0;
+            int count = 1;
             lines = new string[pages];
 
             WebClient client = new WebClient();
@@ -57,11 +57,8 @@ namespace FileManager1
                             
                                                                 
             }*/
-            while(pages > 0)
-            {
-
-            }
-            using (Stream stream = client.OpenRead("https://www.amazon.com/s?k=" + comboBox1.Text+ "&i=stripbooks-intl-ship&page="))
+            Go:
+            using (Stream stream = client.OpenRead("https://www.amazon.com/s?k=" + comboBox1.Text+ "&i=stripbooks-intl-ship&page="+count))
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
@@ -108,7 +105,7 @@ namespace FileManager1
                                     listBox1.Items.Add(str2 + " by " + str4);
                                 }
                             }
-                            count++;
+                       
                             pages--;    
                         }
                         MatchCollection mathes = regexLink.Matches(line);
@@ -125,7 +122,8 @@ namespace FileManager1
                     }
                     if(pages > 0)
                     {
-
+                        count++;
+                        goto Go;
                     }
                 }
             }
