@@ -23,33 +23,49 @@ namespace FileManager1
             progLang = comboBox1.Text;
             pages = Convert.ToInt32(textBox1.Text);
             int ind = 0;
-            lines = new string[pages];
+            lines = new string[16];
 
             WebClient client = new WebClient();
+            client.Headers.Add(HttpRequestHeader.AcceptCharset, "UTF-8");
+            string str = client.DownloadString("https://www.amazon.com/s?k=" + comboBox1.Text + "&i=stripbooks-intl-ship&page=" + pages);
 
-            using (Stream stream = client.OpenRead("https://www.packtpub.com/catalogsearch/result/?q="+ comboBox1.Text+ "&released=Available&page="+ pages))
+
+            Regex regex1 = new Regex("<span class=\"a-size-medium a-color-base a-text-normal\">(.*?)</span>");
+            MatchCollection matches = regex1.Matches(str);
+            //MatchCollection matches1 = regex1.Matches(line);
+            Regex regex2 = new Regex("<a class=\"a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal\" href=\"(.*?)>");
+            MatchCollection mathes = regex2.Matches(str);
+            if(mathes.Count > 0)
+            {
+                foreach(Match match in mathes)
+                {
+                    string str2 = match.Groups[1].Value;
+                    lines[ind] = str2;
+                    ind++;
+                }
+            }
+
+            if (matches.Count > 0)
+            {
+                foreach (Match match in matches){
+                    string str2 = match.Groups[1].Value;
+                    listBox1.Items.Add(str2);
+                    
+                    //lines[ind]=line;
+                    //pages--;
+                    //
+                }//listBox1.Items.Add(match.Value);    
+                            
+                                                                
+            }
+            using (Stream stream = client.OpenRead("https://www.amazon.com/s?k=" + comboBox1.Text+ "&i=stripbooks-intl-ship&page=" + pages))
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     string line = "";
                     while ((line = reader.ReadLine()) != null )
                     {
-                        if(pages <= 0)
-                        {
-                            break;
-                        }
-                        //Regex regex1 = new Regex(comboBox1.Text);
-                        Regex regex1 = new Regex("a href");
-                        MatchCollection matches1 = regex1.Matches(line);
-                        if (matches1.Count > 0)
-                        {
-                            foreach (Match match in matches1){
-                                listBox1.Items.Add(line);
-                                lines[ind]=line;
-                                pages--;
-                                ind++;
-                            }//listBox1.Items.Add(match.Value);                                        
-                        }
+                        
                        
                     }
                 }
@@ -66,15 +82,8 @@ namespace FileManager1
         {
             if(lines != null)
             {
-                var line = lines[listBox1.SelectedIndex].Split('"');
-                Process.Start(new ProcessStartInfo(line[1]) { UseShellExecute = true });
-                using (FileStream file = new FileStream("C:\\Новая папка\\log.txt", FileMode.OpenOrCreate))
-                {
-                    byte[] buffer = Encoding.Default.GetBytes(lines[listBox1.SelectedIndex]);
-                    file.WriteAsync(buffer);//
-                    file.Close();
-                }
-
+                //var line = lines[listBox1.SelectedIndex].Split('"');
+                Process.Start(new ProcessStartInfo("https://www.amazon.com/"+lines[listBox1.SelectedIndex]) { UseShellExecute = true }); 
             }
                 
             if(listBox1.SelectedItem.ToString() == "Dont touch")
