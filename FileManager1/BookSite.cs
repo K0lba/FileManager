@@ -23,33 +23,32 @@ namespace FileManager1
             progLang = comboBox1.Text;
             pages = Convert.ToInt32(textBox1.Text);
             int ind = 0;
-            lines = new string[16];
+            int count = 0;
+            lines = new string[pages];
 
             WebClient client = new WebClient();
             client.Headers.Add(HttpRequestHeader.AcceptCharset, "UTF-8");
-            string str = client.DownloadString("https://www.amazon.com/s?k=" + comboBox1.Text + "&i=stripbooks-intl-ship&page=" + pages);
+            string str = client.DownloadString("https://www.amazon.com/s?k=" + comboBox1.Text + "&i=stripbooks-intl-ship&page=");
+            
 
-
-            Regex regex1 = new Regex("<span class=\"a-size-medium a-color-base a-text-normal\">(.*?)</span>");
-            MatchCollection matches = regex1.Matches(str);
+            Regex regexName = new Regex("<span class=\"a-size-medium a-color-base a-text-normal\">(.*?)</span>");
+            //MatchCollection matches = regexName.Matches(str);
+            Regex regexDate = new Regex("<span class=\"a-size-base a-color-secondary a-text-normal\">(.*?)</span>");
+            //MatchCollection matchesDate = regexDate.Matches(str);
+            Regex regexAuthor = new Regex("<a class=\"a-size-base a-link-normal s-underline-text s-underline-link-text s-link-style\" href=\"(.*?)\">(.*?)</a>");
+            //MatchCollection matchesAuthor = regexAuthor.Matches(str);
             //MatchCollection matches1 = regex1.Matches(line);
-            Regex regex2 = new Regex("<a class=\"a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal\" href=\"(.*?)>");
-            MatchCollection mathes = regex2.Matches(str);
-            if(mathes.Count > 0)
-            {
-                foreach(Match match in mathes)
-                {
-                    string str2 = match.Groups[1].Value;
-                    lines[ind] = str2;
-                    ind++;
-                }
-            }
+            Regex regexLink = new Regex("<a class=\"a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal\" href=\"(.*?)>");
+            //MatchCollection mathes = regexLink.Matches(str);
+            
 
-            if (matches.Count > 0)
+            /*if (matches.Count > 0)
             {
-                foreach (Match match in matches){
-                    string str2 = match.Groups[1].Value;
-                    listBox1.Items.Add(str2);
+                for(int i=0; i<matches.Count;i++){
+                    string str2 = matches[i].Groups[1].Value;
+                    string str3 = matchesDate[i].Groups[1].Value;
+                    string str4 = matchesAuthor[i].Groups[2].Value;
+                    listBox1.Items.Add(str2+" "+str4+" "+str3);
                     
                     //lines[ind]=line;
                     //pages--;
@@ -57,16 +56,76 @@ namespace FileManager1
                 }//listBox1.Items.Add(match.Value);    
                             
                                                                 
+            }*/
+            while(pages > 0)
+            {
+
             }
-            using (Stream stream = client.OpenRead("https://www.amazon.com/s?k=" + comboBox1.Text+ "&i=stripbooks-intl-ship&page=" + pages))
+            using (Stream stream = client.OpenRead("https://www.amazon.com/s?k=" + comboBox1.Text+ "&i=stripbooks-intl-ship&page="))
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     string line = "";
                     while ((line = reader.ReadLine()) != null )
                     {
+                        if (pages <= 0)
+                        {
+                            break;
+                        }
+                        MatchCollection matches = regexName.Matches(line);
+                        if(matches.Count > 0)
+                        {
+                            MatchCollection matchesDate = regexDate.Matches(line);
+                            MatchCollection matchesAuthor = regexAuthor.Matches(line);
+                            if( matchesDate.Count > 0 && matchesAuthor.Count > 0)
+                            {
+                                for(int i = 0; i < matchesDate.Count; i++)
+                                {
+                                    string str2 = matches[i].Groups[1].Value;
+                                    string str3 = matchesDate[i].Groups[1].Value;
+                                    string str4 = matchesAuthor[i].Groups[2].Value;
+                                    listBox1.Items.Add(str2 + " by " + str4 + " DATE: " + str3);
+                                }
+                            }
+                            else if(matchesDate.Count > 0)
+                            {
+                                //Regex newAuthor = new Regex("<span class=\"a-size-base\">(.*?)</span>");
+                                //MatchCollection matchesAuthor2 = regexAuthor.Matches(line);
+                                for (int i = 0; i < matchesDate.Count; i++)
+                                {
+                                    string str2 = matches[i].Groups[1].Value;
+                                    string str3 = matchesDate[i].Groups[1].Value;
+                                    //string str4 = matchesAuthor2[i].Groups[1].Value;
+                                    listBox1.Items.Add(str2 + " DATE: " + str3);
+                                }
+                            }
+                            else
+                            {
+                                for (int i = 0; i < matchesAuthor.Count; i++)
+                                {
+                                    string str2 = matches[i].Groups[1].Value;
+                                    string str4 = matchesAuthor[i].Groups[2].Value;
+                                    listBox1.Items.Add(str2 + " by " + str4);
+                                }
+                            }
+                            count++;
+                            pages--;    
+                        }
+                        MatchCollection mathes = regexLink.Matches(line);
+                        if(mathes.Count > 0)
+                        {
+                            foreach(Match match in mathes)
+                            {
+                                string str2 = match.Groups[1].Value;
+                                lines[ind] = str2;
+                                ind++;
+                            }
+                        }
                         
-                       
+                    }
+                    if(pages > 0)
+                    {
+
                     }
                 }
             }
