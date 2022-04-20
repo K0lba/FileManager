@@ -11,11 +11,13 @@ namespace FileManager1
         string progLang;
         int pages;
         string[] lines;
-
+        [System.ComponentModel.Browsable(true)]
+        public System.Windows.Forms.AutoCompleteMode AutoCompleteMode { get; set; }
         public BookSite()
         {
             InitializeComponent();
             listBox1.Items.Add("Dont touch");
+            //comboBox1.AutoCompleteMode = AutoCompleteMode.Append;
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -30,7 +32,7 @@ namespace FileManager1
             client.Encoding = Encoding.UTF8;
             client.Headers.Add(HttpRequestHeader.AcceptCharset, "UTF-8");
 
-
+            Go:
             client.Headers[HttpRequestHeader.AcceptEncoding] = "gzip";
             var responseStream = new GZipStream(client.OpenRead("https://www.amazon.com/s?k=" + comboBox1.Text + "&i=stripbooks-intl-ship&page=" + count), CompressionMode.Decompress);
             var reader1 = new StreamReader(responseStream);
@@ -72,7 +74,7 @@ namespace FileManager1
                             
                                                                 
             }*/
-            Go:
+            //Go:
             using (Stream stream = responseStream)
             {
                 
