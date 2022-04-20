@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Diagnostics;
+using System.IO.Compression;
 
 namespace FileManager1
 {
@@ -16,7 +17,6 @@ namespace FileManager1
             InitializeComponent();
             listBox1.Items.Add("Dont touch");
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
@@ -27,9 +27,24 @@ namespace FileManager1
             lines = new string[pages];
 
             WebClient client = new WebClient();
+            client.Encoding = Encoding.UTF8;
             client.Headers.Add(HttpRequestHeader.AcceptCharset, "UTF-8");
-            string str = client.DownloadString("https://www.amazon.com/s?k=" + comboBox1.Text + "&i=stripbooks-intl-ship&page=");
-            
+
+
+            client.Headers[HttpRequestHeader.AcceptEncoding] = "gzip";
+            var responseStream = new GZipStream(client.OpenRead("https://www.amazon.com/s?k=" + comboBox1.Text + "&i=stripbooks-intl-ship&page=" + count), CompressionMode.Decompress);
+            var reader1 = new StreamReader(responseStream);
+            //var textResponse = reader1.ReadToEnd();
+            //StreamWriter file = new StreamWriter("C:\\Новая папка\\g.txt");
+            //file.Write(textResponse);
+
+
+            string str = client.DownloadString("https://www.amazon.com/");
+
+
+
+
+
 
             Regex regexName = new Regex("<span class=\"a-size-medium a-color-base a-text-normal\">(.*?)</span>");
             //MatchCollection matches = regexName.Matches(str);
@@ -58,12 +73,13 @@ namespace FileManager1
                                                                 
             }*/
             Go:
-            using (Stream stream = client.OpenRead("https://www.amazon.com/s?k=" + comboBox1.Text+ "&i=stripbooks-intl-ship&page="+count))
+            using (Stream stream = responseStream)
             {
-                using (StreamReader reader = new StreamReader(stream))
+                
+                using (StreamReader reader = reader1)
                 {
                     string line = "";
-                    while ((line = reader.ReadLine()) != null )
+                    while ((line = reader1.ReadLine()) != null )
                     {
                         if (pages <= 0)
                         {
