@@ -16,12 +16,13 @@ namespace FileManager1
         public BookSite()
         {
             InitializeComponent();
-            listBox1.Items.Add("Dont touch");
-            //comboBox1.AutoCompleteMode = AutoCompleteMode.Append;
+            //listView1.Items.Add("Dont touch");
+            
+
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            listBox1.Items.Clear();
+            listView1.Items.Clear();
             progLang = comboBox1.Text;
             pages = Convert.ToInt32(textBox1.Text);
             int ind = 0;
@@ -96,13 +97,15 @@ namespace FileManager1
                             {
                                 for(int i = 0; i < matchesDate.Count; i++)
                                 {
-                                    string str2 = matches[i].Groups[1].Value;
-                                    string str3 = matchesDate[i].Groups[1].Value;
-                                    string str4 = matchesAuthor[i].Groups[2].Value;
-                                    listBox1.Items.Add(str2 + " by " + str4 + " DATE: " + str3);
+                                    ListViewItem listViewItem = new ListViewItem(new string[] {matches[i].Groups[1].Value,matchesDate[i].Groups[1].Value, matchesAuthor[i].Groups[2].Value});
+                                    listView1.Items.Add(listViewItem);
+                                    //string str2 = ;
+                                    //string str3 = ;
+                                    //string str4 = ;
+                                    //listView1.Items.Add(str2 + " by " + str4 + " DATE: " + str3);
                                 }
                             }
-                            else if(matchesDate.Count > 0)
+                            /*else if(matchesDate.Count > 0)
                             {
                                 //Regex newAuthor = new Regex("<span class=\"a-size-base\">(.*?)</span>");
                                 //MatchCollection matchesAuthor2 = regexAuthor.Matches(line);
@@ -111,7 +114,7 @@ namespace FileManager1
                                     string str2 = matches[i].Groups[1].Value;
                                     string str3 = matchesDate[i].Groups[1].Value;
                                     //string str4 = matchesAuthor2[i].Groups[1].Value;
-                                    listBox1.Items.Add(str2 + " DATE: " + str3);
+                                    listView1.Items.Add(str2 + " DATE: " + str3);
                                 }
                             }
                             else
@@ -120,9 +123,9 @@ namespace FileManager1
                                 {
                                     string str2 = matches[i].Groups[1].Value;
                                     string str4 = matchesAuthor[i].Groups[2].Value;
-                                    listBox1.Items.Add(str2 + " by " + str4);
+                                    listView1.Items.Add(str2 + " by " + str4);
                                 }
-                            }
+                            }*/
                        
                             pages--;    
                         }
@@ -158,14 +161,27 @@ namespace FileManager1
             if(lines != null)
             {
                 //var line = lines[listBox1.SelectedIndex].Split('"');
-                Process.Start(new ProcessStartInfo("https://www.amazon.com/"+lines[listBox1.SelectedIndex]) { UseShellExecute = true }); 
+                Process.Start(new ProcessStartInfo("https://www.amazon.com/"+lines[listView1.Items.Count]) { UseShellExecute = true }); 
             }
-                
-            if(listBox1.SelectedItem.ToString() == "Dont touch")
+              
+            if(listView1.SelectedItems.ToString() == "Dont touch")
                 Process.Start(new ProcessStartInfo(@"https://www.youtube.com/watch?v=DLzxrzFCyOs&ab_channel=AllKindsOfStuff") { UseShellExecute = true });
             //System.Diagnostics.Process.Start(line[1]);
             
                 
+        }
+
+        private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (lines != null)
+            {
+                //var line = lines[listBox1.SelectedIndex].Split('"');
+                Process.Start(new ProcessStartInfo("https://www.amazon.com/" + lines[listView1.Columns[0].Index]) { UseShellExecute = true });
+            }
+
+            if (listView1.SelectedItems.ToString() == "Dont touch")
+                Process.Start(new ProcessStartInfo(@"https://www.youtube.com/watch?v=DLzxrzFCyOs&ab_channel=AllKindsOfStuff") { UseShellExecute = true });
+            //System.Diagnostics.Process.Start(line[1]);
         }
     }
 }

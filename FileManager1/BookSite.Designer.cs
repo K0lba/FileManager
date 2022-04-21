@@ -28,26 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.button1 = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.listView1 = new System.Windows.Forms.ListView();
+            this.BookName = new System.Windows.Forms.ColumnHeader("(нет)");
+            this.AuthorName = new System.Windows.Forms.ColumnHeader();
+            this.Date = new System.Windows.Forms.ColumnHeader();
+            this.Rate = new System.Windows.Forms.ColumnHeader();
+            this.Price = new System.Windows.Forms.ColumnHeader();
             this.SuspendLayout();
-            // 
-            // listBox1
-            // 
-            this.listBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 20;
-            this.listBox1.Location = new System.Drawing.Point(12, 63);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(776, 364);
-            this.listBox1.TabIndex = 0;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
-            this.listBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDoubleClick);
             // 
             // button1
             // 
@@ -95,16 +86,56 @@
             this.comboBox1.Size = new System.Drawing.Size(560, 28);
             this.comboBox1.TabIndex = 4;
             // 
+            // listView1
+            // 
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.BookName,
+            this.AuthorName,
+            this.Date,
+            this.Rate,
+            this.Price});
+            this.listView1.Location = new System.Drawing.Point(12, 46);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(776, 391);
+            this.listView1.TabIndex = 5;
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseDoubleClick);
+            // 
+            // BookName
+            // 
+            this.BookName.Tag = "";
+            this.BookName.Text = "BookName";
+            this.BookName.Width = 400;
+            // 
+            // AuthorName
+            // 
+            this.AuthorName.Text = "AuthorName";
+            this.AuthorName.Width = 150;
+            // 
+            // Date
+            // 
+            this.Date.Text = "Date";
+            this.Date.Width = 100;
+            // 
+            // Rate
+            // 
+            this.Rate.Text = "Rate";
+            // 
+            // Price
+            // 
+            this.Price.Text = "Price";
+            // 
             // BookSite
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.listView1);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.listBox1);
             this.Name = "BookSite";
             this.Text = "BookSite";
             this.ResumeLayout(false);
@@ -113,11 +144,15 @@
         }
 
         #endregion
-
-        private ListBox listBox1;
         private Button button1;
         private TextBox textBox1;
         private Label label1;
         private ComboBox comboBox1;
+        private ListView listView1;
+        private ColumnHeader BookName;
+        private ColumnHeader AuthorName;
+        private ColumnHeader Date;
+        private ColumnHeader Rate;
+        private ColumnHeader Price;
     }
 }
