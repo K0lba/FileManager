@@ -84,27 +84,6 @@ namespace FileManager1
                                     list.Add(book);                                 
                                 }
                             }
-                            /*else if(matchesDate.Count > 0)
-                            {
-                                //Regex newAuthor = new Regex("<span class=\"a-size-base\">(.*?)</span>");
-                                //MatchCollection matchesAuthor2 = regexAuthor.Matches(line);
-                                for (int i = 0; i < matchesDate.Count; i++)
-                                {
-                                    string str2 = matches[i].Groups[1].Value;
-                                    string str3 = matchesDate[i].Groups[1].Value;
-                                    //string str4 = matchesAuthor2[i].Groups[1].Value;
-                                    listView1.Items.Add(str2 + " DATE: " + str3);
-                                }
-                            }
-                            else
-                            {
-                                for (int i = 0; i < matchesAuthor.Count; i++)
-                                {
-                                    string str2 = matches[i].Groups[1].Value;
-                                    string str4 = matchesAuthor[i].Groups[2].Value;
-                                    listView1.Items.Add(str2 + " by " + str4);
-                                }
-                            }*/
                        
                             pages--;    
                         }
