@@ -3,32 +3,26 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Diagnostics;
 using System.IO.Compression;
+using System.Collections;
 
 namespace FileManager1
 {
     public partial class BookSite : Form
     {
-        string progLang;
         int pages;
         string[] lines;
         [System.ComponentModel.Browsable(true)]
-        public System.Windows.Forms.AutoCompleteMode AutoCompleteMode { get; set; }
         public BookSite()
         {
             InitializeComponent();
-            //listView1.Items.Add("Dont touch");
-            
-
         }
         private void button1_Click(object sender, EventArgs e)
         {
             listView1.Items.Clear();
-            progLang = comboBox1.Text;
             pages = Convert.ToInt32(textBox1.Text);
             int ind = 0;
             int count = 1;
             lines = new string[pages];
-
             WebClient client = new WebClient();
             client.Encoding = Encoding.UTF8;
             client.Headers.Add(HttpRequestHeader.AcceptCharset, "UTF-8");
@@ -40,13 +34,6 @@ namespace FileManager1
             //var textResponse = reader1.ReadToEnd();
             //StreamWriter file = new StreamWriter("C:\\Новая папка\\g.txt");
             //file.Write(textResponse);
-
-
-            string str = client.DownloadString("https://www.amazon.com/");
-
-
-
-
 
 
             Regex regexName = new Regex("<span class=\"a-size-medium a-color-base a-text-normal\">(.*?)</span>");
@@ -97,7 +84,7 @@ namespace FileManager1
                             {
                                 for(int i = 0; i < matchesDate.Count; i++)
                                 {
-                                    ListViewItem listViewItem = new ListViewItem(new string[] {matches[i].Groups[1].Value,matchesDate[i].Groups[1].Value, matchesAuthor[i].Groups[2].Value});
+                                    ListViewItem listViewItem = new ListViewItem(new string[] {matches[i].Groups[1].Value, matchesAuthor[i].Groups[2].Value, matchesDate[i].Groups[1].Value});
                                     listView1.Items.Add(listViewItem);
                                     //string str2 = ;
                                     //string str3 = ;
@@ -182,6 +169,32 @@ namespace FileManager1
             if (listView1.SelectedItems.ToString() == "Dont touch")
                 Process.Start(new ProcessStartInfo(@"https://www.youtube.com/watch?v=DLzxrzFCyOs&ab_channel=AllKindsOfStuff") { UseShellExecute = true });
             //System.Diagnostics.Process.Start(line[1]);
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void listView1_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            this.listView1.ListViewItemSorter = new ListViewItemComparer(e.Column);
+        }
+        class ListViewItemComparer : IComparer
+        {
+            private int col;
+            public ListViewItemComparer()
+            {
+                col = 0;
+            }
+            public ListViewItemComparer(int column)
+            {
+                col = column;
+            }
+            public int Compare(object x, object y)
+            {
+                return String.Compare(((ListViewItem)x).SubItems[col].Text, ((ListViewItem)y).SubItems[col].Text);
+            }
         }
     }
 }
