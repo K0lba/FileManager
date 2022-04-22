@@ -11,6 +11,8 @@ namespace FileManager1
     {
         int pages;
         string[] lines;
+        List<Book> list;
+        
         [System.ComponentModel.Browsable(true)]
         public BookSite()
         {
@@ -23,6 +25,7 @@ namespace FileManager1
             int ind = 0;
             int count = 1;
             lines = new string[pages];
+            list = new List<Book>();
             WebClient client = new WebClient();
             client.Encoding = Encoding.UTF8;
             client.Headers.Add(HttpRequestHeader.AcceptCharset, "UTF-8");
@@ -41,28 +44,15 @@ namespace FileManager1
             Regex regexDate = new Regex("<span class=\"a-size-base a-color-secondary a-text-normal\">(.*?)</span>");
             //MatchCollection matchesDate = regexDate.Matches(str);
             Regex regexAuthor = new Regex("<a class=\"a-size-base a-link-normal s-underline-text s-underline-link-text s-link-style\" href=\"(.*?)\">(.*?)</a>");
+            //Regex regexAuthor1 = new Regex("span class=\"a-size-base a-color-base\">(.*?)</span>");
             //MatchCollection matchesAuthor = regexAuthor.Matches(str);
             //MatchCollection matches1 = regex1.Matches(line);
             Regex regexLink = new Regex("<a class=\"a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal\" href=\"(.*?)>");
             //MatchCollection mathes = regexLink.Matches(str);
-            
+            Regex regexPrice1 = new Regex("<span class=\"a-price-whole\">(.*?)<span class=\"a-price-decimal\">(.*?)</span>");
+            Regex regexPrice2 = new Regex("<span class=\"a-price-fraction\">(.*?)</span>");
+            Regex regexRate = new Regex("span class=\"a-icon-alt\">(.*?)</span>"); 
 
-            /*if (matches.Count > 0)
-            {
-                for(int i=0; i<matches.Count;i++){
-                    string str2 = matches[i].Groups[1].Value;
-                    string str3 = matchesDate[i].Groups[1].Value;
-                    string str4 = matchesAuthor[i].Groups[2].Value;
-                    listBox1.Items.Add(str2+" "+str4+" "+str3);
-                    
-                    //lines[ind]=line;
-                    //pages--;
-                    //
-                }//listBox1.Items.Add(match.Value);    
-                            
-                                                                
-            }*/
-            //Go:
             using (Stream stream = responseStream)
             {
                 
@@ -75,21 +65,30 @@ namespace FileManager1
                         {
                             break;
                         }
+                        Book book = new Book();
                         MatchCollection matches = regexName.Matches(line);
                         if(matches.Count > 0)
                         {
+                            MatchCollection mathes = regexLink.Matches(line);
                             MatchCollection matchesDate = regexDate.Matches(line);
                             MatchCollection matchesAuthor = regexAuthor.Matches(line);
-                            if( matchesDate.Count > 0 && matchesAuthor.Count > 0)
+                            MatchCollection  matchesPrice1 = regexPrice1.Matches(line);
+                            MatchCollection matchesPrice2 = regexPrice2.Matches(line);
+                            MatchCollection matchRate = regexRate.Matches(line);
+
+                            if (matches.Count > 0 && matchesDate.Count > 0 && matchesAuthor.Count > 0 && matchesPrice1.Count > 0 && mathes.Count > 0)
                             {
-                                for(int i = 0; i < matchesDate.Count; i++)
+                                for (int i = 0; i < matchesDate.Count; i++)
                                 {
-                                    ListViewItem listViewItem = new ListViewItem(new string[] {matches[i].Groups[1].Value, matchesAuthor[i].Groups[2].Value, matchesDate[i].Groups[1].Value});
+                                    book.Author = matchesAuthor[i].Groups[2].Value;
+                                    book.Price = matchesPrice1[i].Groups[1].Value + matchesPrice1[i].Groups[2].Value + matchesPrice2[i].Groups[1].Value;
+                                    book.Name = matches[i].Groups[1].Value;
+                                    book.Rate = matchRate[i].Groups[1].Value.Split(" ")[0];
+                                    book.Date = matchesDate[i].Groups[1].Value;
+                                    book.Link = mathes[i].Groups[1].Value;
+                                    ListViewItem listViewItem = new ListViewItem(new string[] {book.Name ,book.Author ,book.Date,book.Rate,book.Price });
                                     listView1.Items.Add(listViewItem);
-                                    //string str2 = ;
-                                    //string str3 = ;
-                                    //string str4 = ;
-                                    //listView1.Items.Add(str2 + " by " + str4 + " DATE: " + str3);
+                                    list.Add(book);                                 
                                 }
                             }
                             /*else if(matchesDate.Count > 0)
@@ -116,16 +115,7 @@ namespace FileManager1
                        
                             pages--;    
                         }
-                        MatchCollection mathes = regexLink.Matches(line);
-                        if(mathes.Count > 0)
-                        {
-                            foreach(Match match in mathes)
-                            {
-                                string str2 = match.Groups[1].Value;
-                                lines[ind] = str2;
-                                ind++;
-                            }
-                        }
+                        
                         
                     }
                     if(pages > 0)
@@ -138,43 +128,32 @@ namespace FileManager1
 
         }
 
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
 
-        }
-
-        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if(lines != null)
-            {
-                //var line = lines[listBox1.SelectedIndex].Split('"');
-                Process.Start(new ProcessStartInfo("https://www.amazon.com/"+lines[listView1.Items.Count]) { UseShellExecute = true }); 
-            }
-              
-            if(listView1.SelectedItems.ToString() == "Dont touch")
-                Process.Start(new ProcessStartInfo(@"https://www.youtube.com/watch?v=DLzxrzFCyOs&ab_channel=AllKindsOfStuff") { UseShellExecute = true });
-            //System.Diagnostics.Process.Start(line[1]);
-            
-                
-        }
+        
 
         private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (lines != null)
             {
-                //var line = lines[listBox1.SelectedIndex].Split('"');
-                Process.Start(new ProcessStartInfo("https://www.amazon.com/" + lines[listView1.Columns[0].Index]) { UseShellExecute = true });
+                ListView.SelectedIndexCollection sel = listView1.SelectedIndices;
+                string nm = "";
+                string link = "";
+                if (sel.Count == 1)
+                {
+                    ListViewItem selItem = listView1.Items[sel[0]];
+                    nm = selItem.SubItems[0].Text;
+                }
+                foreach(var item in list)
+                {
+                    if (item.Name == nm)
+                    {
+                        link = item.Link;
+                    }
+                }
+                Process.Start(new ProcessStartInfo("https://www.amazon.com/" + link) { UseShellExecute = true });
             }
-
-            if (listView1.SelectedItems.ToString() == "Dont touch")
-                Process.Start(new ProcessStartInfo(@"https://www.youtube.com/watch?v=DLzxrzFCyOs&ab_channel=AllKindsOfStuff") { UseShellExecute = true });
-            //System.Diagnostics.Process.Start(line[1]);
         }
 
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
 
         private void listView1_ColumnClick(object sender, ColumnClickEventArgs e)
         {
@@ -195,6 +174,16 @@ namespace FileManager1
             {
                 return String.Compare(((ListViewItem)x).SubItems[col].Text, ((ListViewItem)y).SubItems[col].Text);
             }
+        }
+        class Book
+        {
+            public string Name { get; set; }
+            public string Link { get; set; }
+            public string Date { get; set; }
+            public string Author { get; set; }
+            public string Price { get; set; }
+
+            public string Rate { get; set; }
         }
     }
 }
