@@ -30,28 +30,21 @@ namespace FileManager1
             client.Encoding = Encoding.UTF8;
             client.Headers.Add(HttpRequestHeader.AcceptCharset, "UTF-8");
 
-            Go:
+            while (pages > 0)
+            {
             client.Headers[HttpRequestHeader.AcceptEncoding] = "gzip";
             var responseStream = new GZipStream(client.OpenRead("https://www.amazon.com/s?k=" + comboBox1.Text + "&i=stripbooks-intl-ship&page=" + count), CompressionMode.Decompress);
             var reader1 = new StreamReader(responseStream);
-            //var textResponse = reader1.ReadToEnd();
-            //StreamWriter file = new StreamWriter("C:\\Новая папка\\g.txt");
-            //file.Write(textResponse);
 
-
+            #region Regex
             Regex regexName = new Regex("<span class=\"a-size-medium a-color-base a-text-normal\">(.*?)</span>");
-            //MatchCollection matches = regexName.Matches(str);
             Regex regexDate = new Regex("<span class=\"a-size-base a-color-secondary a-text-normal\">(.*?)</span>");
-            //MatchCollection matchesDate = regexDate.Matches(str);
-            Regex regexAuthor = new Regex("<a class=\"a-size-base a-link-normal s-underline-text s-underline-link-text s-link-style\" href=\"(.*?)\">(.*?)</a>");
-            //Regex regexAuthor1 = new Regex("span class=\"a-size-base a-color-base\">(.*?)</span>");
-            //MatchCollection matchesAuthor = regexAuthor.Matches(str);
-            //MatchCollection matches1 = regex1.Matches(line);
+            Regex regexAuthor = new Regex("<a class=\"a-size-base a-link-normal s-underline-text s-underline-link-text s-link-style\" href=\"(.*?)\">(.*?)</a>");;
             Regex regexLink = new Regex("<a class=\"a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal\" href=\"(.*?)>");
-            //MatchCollection mathes = regexLink.Matches(str);
             Regex regexPrice1 = new Regex("<span class=\"a-price-whole\">(.*?)<span class=\"a-price-decimal\">(.*?)</span>");
             Regex regexPrice2 = new Regex("<span class=\"a-price-fraction\">(.*?)</span>");
-            Regex regexRate = new Regex("span class=\"a-icon-alt\">(.*?)</span>"); 
+            Regex regexRate = new Regex("span class=\"a-icon-alt\">(.*?)</span>");
+            #endregion
 
             using (Stream stream = responseStream)
             {
@@ -76,7 +69,7 @@ namespace FileManager1
                             MatchCollection matchesPrice2 = regexPrice2.Matches(line);
                             MatchCollection matchRate = regexRate.Matches(line);
 
-                            if (matches.Count > 0 && matchesDate.Count > 0 && matchesAuthor.Count > 0 && matchesPrice1.Count > 0 && mathes.Count > 0)
+                            if (matches.Count > 0 && matchesDate.Count > 0 && matchesAuthor.Count > 0 && matchesPrice1.Count > 0 && mathes.Count > 0 && matchRate.Count > 0)
                             {
                                 for (int i = 0; i < matchesDate.Count; i++)
                                 {
@@ -118,13 +111,12 @@ namespace FileManager1
                         
                         
                     }
-                    if(pages > 0)
-                    {
-                        count++;
-                        goto Go;
-                    }
+                    count++;
+                    
                 }
             }
+            }
+            
 
         }
 
