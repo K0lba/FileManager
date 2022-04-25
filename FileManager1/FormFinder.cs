@@ -65,13 +65,18 @@ namespace FileManager1
                         MatchCollection matchCollection = regexText.Matches(line);
                         if (matchCollection.Count > 0)
                         {
-                            
+                            Parallel.ForEach(matchCollection, match=> { ListBoxAdd(line); });
+                            Thread.Sleep(500);
                         }
                     }
                 }
             }
 
 
+        }
+        public void ListBoxAdd(string match)
+        {
+            this.Invoke(() => listBox1.Items.Add(match));
         }
 
         private void FormFinder_Load(object sender, EventArgs e)
