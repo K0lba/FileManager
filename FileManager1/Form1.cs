@@ -25,7 +25,7 @@ namespace FileManager1
             this.size = size;
             this.font = font;
             this.color = color;
-            if( size!=null || font!=null)
+            if( size!=null && font!=null)
                 this.Font = new Font(font,size);
             if(color!=null)
                 this.BackColor = color;
@@ -290,14 +290,14 @@ namespace FileManager1
             Form2 form;
             if (listBox1.SelectedItem != null)
             {
-                form = new Form2(DelName, textBox1.Text,listBox1,listBox2,1) ;
+                form = new Form2(DelName, textBox1.Text,listBox1,listBox2,1,color, font, size) ;
                 form.Show();
                 
                 
             }
             else if (listBox2.SelectedItem != null)
             {
-                form = new Form2(DelName2,textBox2.Text,listBox1,listBox2,2);
+                form = new Form2(DelName2,textBox2.Text,listBox1,listBox2,2, color, font, size);
                 form.Show();   
             }
 
@@ -308,12 +308,12 @@ namespace FileManager1
             Form3 form;
             if(listBox1.SelectedItem != null)
             {
-                form = new Form3(DelName, listBox1.SelectedItem.ToString(),listBox1);
+                form = new Form3(DelName, listBox1.SelectedItem.ToString(), listBox1,color, font, size);
                 form.Show();
             }
             else if(listBox2.SelectedItem != null)
             {
-                form = new Form3(DelName2, listBox2.SelectedItem.ToString(), listBox2);
+                form = new Form3(DelName2, listBox2.SelectedItem.ToString(), listBox2, color, font, size);
                 form.Show();
             }
         }
@@ -500,5 +500,19 @@ namespace FileManager1
              
         }
 
+        private void button10_Click(object sender, EventArgs e)
+        {
+            if(listBox1.SelectedItem != null)
+            {
+                FormFinder formFinder = new FormFinder(DelName,color,font,size);
+                formFinder.Show();
+            }
+            if (listBox2.SelectedItem != null)
+            {
+                FormFinder formFinder = new FormFinder(DelName2, color, font, size);
+                formFinder.Show();
+            }
+
+        }
     }
 }

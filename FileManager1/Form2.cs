@@ -18,7 +18,7 @@ namespace FileManager1
         private ListBox _list2;
         private int _type;
 
-        public Form2(string path, string text, ListBox listbox1, ListBox listbox2,int type)
+        public Form2(string path, string text, ListBox listbox1, ListBox listbox2,int type, Color color, string font, int size)
         {
             InitializeComponent();
             _path = path;
@@ -26,6 +26,10 @@ namespace FileManager1
             _list = listbox1;
             _list2 = listbox2;
             _type = type;
+            if (size != null && font != null)
+                this.Font = new Font(font, size);
+            if (color != null)
+                this.BackColor = color;
         }
 
         private void button1_Click(object sender, EventArgs e)

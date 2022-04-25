@@ -16,12 +16,16 @@ namespace FileManager1
         private string _name;
         private ListBox _list;
 
-        public Form3(string path,string name,ListBox list)
+        public Form3(string path,string name,ListBox list, Color color, string font, int size)
         {
             InitializeComponent();
             _path = path;
             _name = name;
             _list = list;
+            if (size != null && font != null)
+                this.Font = new Font(font, size);
+            if (color != null)
+                this.BackColor = color;
 
         }
 
