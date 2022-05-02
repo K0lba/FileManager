@@ -15,6 +15,8 @@ namespace FileManager1
     public partial class FormFinder : Form
     {
         string path;
+        string expansion;
+        public DownLoder downLoder = null;
         public FormFinder(string path, Color color, string font, int size)
         {
             InitializeComponent();
@@ -23,6 +25,7 @@ namespace FileManager1
             if (color != null)
                 this.BackColor = color;
             this.path = path;
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -84,5 +87,27 @@ namespace FileManager1
 
         }
 
+        private async void button2_Click(object sender, EventArgs e)
+        {
+            Task task = new Task(() =>
+            {
+                downLoder = new DownLoder();
+                expansion = textBox1.Text.Split('/')[textBox1.Text.Split('/').Length - 1];
+                int result = downLoder.DownloadFile(textBox1.Text, "C:\\Users\\aruds\\Downloads\\" + expansion);
+                MessageBox.Show(result.ToString());
+            });
+            task.Start();
+
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            downLoder.cancelTokenSource.Cancel();
+            Thread.Sleep(5000);
+            if (File.Exists("C:\\Users\\aruds\\Downloads\\" + expansion))
+            {
+                File.Delete("C:\\Users\\aruds\\Downloads\\" + expansion);
+            }
+        }
     }
 }

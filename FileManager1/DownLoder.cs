@@ -10,6 +10,7 @@ namespace FileManager1
 {
     public class DownLoder
     {
+        public CancellationTokenSource cancelTokenSource;
         public DownLoder()
         {
 
@@ -17,51 +18,43 @@ namespace FileManager1
         public int DownloadFile(string remoteFilename,
                                string localFilename)
         {
-            // Function will return the number of bytes processed
-            // to the caller. Initialize to 0 here.
+
             int bytesProcessed = 0;
 
-            // Assign values to these objects here so that they can
-            // be referenced in the finally block
             Stream remoteStream = null;
             Stream localStream = null;
             WebResponse response = null;
 
-            // Use a try/catch/finally block as both the WebRequest and Stream
-            // classes throw exceptions upon error
             try
             {
-                // Create a request for the specified remote file name
                 WebRequest request = WebRequest.Create(remoteFilename);
                 if (request != null)
                 {
-                    // Send the request to the server and retrieve the
-                    // WebResponse object 
+
                     response = request.GetResponse();
                     if (response != null)
                     {
-                        // Once the WebResponse object has been retrieved,
-                        // get the stream object associated with the response's data
                         remoteStream = response.GetResponseStream();
 
-                        // Create the local file
                         localStream = File.Create(localFilename);
 
-                        // Allocate a 1k buffer
                         byte[] buffer = new byte[1024];
                         int bytesRead;
-
-                        // Simple do/while loop to read from stream until
-                        // no bytes are returned
+                        cancelTokenSource = new CancellationTokenSource();
+                        var token = cancelTokenSource.Token;
                         do
                         {
-                            // Read data (up to 1k) from the stream
+                            
+                            if (token.IsCancellationRequested)
+                            {
+                                MessageBox.Show("Canceled operation");
+                                return 0;
+                                
+                            }
                             bytesRead = remoteStream.Read(buffer, 0, buffer.Length);
 
-                            // Write the data to the local file
                             localStream.Write(buffer, 0, bytesRead);
 
-                            // Increment total bytes processed
                             bytesProcessed += bytesRead;
                         } while (bytesRead > 0);
                     }
@@ -73,15 +66,10 @@ namespace FileManager1
             }
             finally
             {
-                // Close the response and streams objects here
-                // to make sure they're closed even if an exception
-                // is thrown at some point
                 if (response != null) response.Close();
                 if (remoteStream != null) remoteStream.Close();
                 if (localStream != null) localStream.Close();
             }
-
-            // Return total bytes processed to caller.
             return bytesProcessed;
         }
     }
