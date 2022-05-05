@@ -48,9 +48,9 @@
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.button1.Location = new System.Drawing.Point(697, 12);
+            this.button1.Location = new System.Drawing.Point(706, 10);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(103, 29);
+            this.button1.Size = new System.Drawing.Size(91, 29);
             this.button1.TabIndex = 1;
             this.button1.Text = "search";
             this.button1.UseVisualStyleBackColor = true;
@@ -66,6 +66,7 @@
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(785, 364);
             this.listBox1.TabIndex = 2;
+            this.listBox1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listBox1_MouseDoubleClick);
             // 
             // button2
             // 

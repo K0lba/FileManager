@@ -44,11 +44,27 @@ namespace FileManager1
                     {
                         foreach (Match match in matchCollection)
                         {
-                            listBox1.Items.Add(match);
+                            listBox1.Items.Add(currentdir.Name);
                         }
                     }
                 
                 }
+                FileInfo[] FILES1 = directoryInfo.GetFiles();
+                Regex regexText1 = new Regex(textBox1.Text);
+
+                foreach (FileInfo currentdir in FILES1)
+                {
+                    MatchCollection matchCollection = regexText1.Matches(currentdir.Name);
+                    if (matchCollection.Count > 0)
+                    {
+                        foreach (Match match in matchCollection)
+                        {
+                            listBox1.Items.Add(currentdir.Name);
+                        }
+                    }
+
+                }
+
 
             }
             FileInfo fileInfo = new FileInfo(path);
@@ -74,7 +90,7 @@ namespace FileManager1
                     }
                 }
             }
-
+            textBox1.Text = "";
 
         }
         public void ListBoxAdd(string match)
@@ -107,6 +123,41 @@ namespace FileManager1
             if (File.Exists("C:\\Users\\aruds\\Downloads\\" + expansion))
             {
                 File.Delete("C:\\Users\\aruds\\Downloads\\" + expansion);
+            }
+        }
+
+        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            
+            textBox1.Text= textBox1.Text+"\\"+ listBox1.SelectedItem.ToString();
+            string newpath = path + "\\" + textBox1.Text;
+            if (File.Exists(newpath))
+            {
+
+                Process.Start(new ProcessStartInfo(newpath) { UseShellExecute = true });
+            }
+            else
+            {
+                listBox1.Items.Clear();
+            
+                DirectoryInfo DIR = new DirectoryInfo(newpath);
+                
+                DirectoryInfo[] DIRS = DIR.GetDirectories();
+
+                foreach (DirectoryInfo currentdir in DIRS)
+                {
+                    listBox1.Items.Add(currentdir.Name);
+                }
+
+                FileInfo[] FILES = DIR.GetFiles();
+
+                foreach (FileInfo file in FILES)
+                {
+                    listBox1.Items.Add(file.Name);
+
+                }
+               
+
             }
         }
     }
