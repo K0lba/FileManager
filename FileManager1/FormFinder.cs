@@ -17,6 +17,7 @@ namespace FileManager1
         string path;
         string expansion;
         public DownLoder downLoder = null;
+        List<string> finded = new List<string>();
         public FormFinder(string path, Color color, string font, int size)
         {
             InitializeComponent();
@@ -31,43 +32,9 @@ namespace FileManager1
         private void button1_Click(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
-            DirectoryInfo directoryInfo = new DirectoryInfo(path);
-            if (directoryInfo.Exists)
-            {
-                DirectoryInfo[] DIRS1 = directoryInfo.GetDirectories();
-                Regex regexText = new Regex(textBox1.Text);
+            finded.Clear();
             
-                foreach (DirectoryInfo currentdir in DIRS1)
-                {
-                    MatchCollection matchCollection = regexText.Matches(currentdir.Name);
-                    if(matchCollection.Count > 0)
-                    {
-                        foreach (Match match in matchCollection)
-                        {
-                            listBox1.Items.Add(currentdir.Name);
-                            
-                        }
-                    }
-                
-                }
-                FileInfo[] FILES1 = directoryInfo.GetFiles();
-                Regex regexText1 = new Regex(textBox1.Text);
-
-                foreach (FileInfo currentdir in FILES1)
-                {
-                    MatchCollection matchCollection = regexText1.Matches(currentdir.Name);
-                    if (matchCollection.Count > 0)
-                    {
-                        foreach (Match match in matchCollection)
-                        {
-                            listBox1.Items.Add(currentdir.Name);
-                        }
-                    }
-
-                }
-
-
-            }
+            
             FileInfo fileInfo = new FileInfo(path);
             if (fileInfo.Exists)
             {
@@ -91,6 +58,31 @@ namespace FileManager1
                     }
                 }
             }
+            else
+            {
+            Recursive(path);
+                void Recursive(string path)
+                {
+                    Parallel.ForEach(Directory.GetDirectories(path), curr =>
+                    {
+                        Regex regexText = new Regex(textBox1.Text);
+                        MatchCollection matchCollection = regexText.Matches(new DirectoryInfo(curr).Name);
+                        if(matchCollection.Count > 0) { finded.Add(new DirectoryInfo(curr).Name); }
+                        Recursive(curr);
+                    });
+                    Parallel.ForEach(Directory.GetFiles(path), curr =>
+                    {
+                        Regex regexF = new Regex(textBox1.Text);
+                        MatchCollection temp = regexF.Matches(new DirectoryInfo(curr).Name);
+                        if (temp.Count > 0) { finded.Add(new DirectoryInfo(curr).Name); }
+
+                    });
+                
+                }
+            }
+            string[] finded2 = new string[finded.Count];
+            for (var i = 0; i < finded.Count; i++) { finded2[i] = finded[i]; }
+            listBox1.Items.AddRange(finded2);
             textBox1.Text = "";
 
         }
@@ -127,43 +119,6 @@ namespace FileManager1
             }
         }
 
-        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
-        {
-            if (listBox1.SelectedItem != null)
-            {
-
-
-                textBox1.Text = textBox1.Text + "\\" + listBox1.SelectedItem.ToString();
-                string newpath = path + "\\" + textBox1.Text;
-                if (File.Exists(newpath))
-                {
-
-                    Process.Start(new ProcessStartInfo(newpath) { UseShellExecute = true });
-                }
-                else if(Directory.Exists(newpath))
-                {
-                    listBox1.Items.Clear();
-
-                    DirectoryInfo DIR = new DirectoryInfo(newpath);
-
-                    DirectoryInfo[] DIRS = DIR.GetDirectories();
-
-                    foreach (DirectoryInfo currentdir in DIRS)
-                    {
-                        listBox1.Items.Add(currentdir.Name);
-                    }
-
-                    FileInfo[] FILES = DIR.GetFiles();
-
-                    foreach (FileInfo file in FILES)
-                    {
-                        listBox1.Items.Add(file.Name);
-
-                    }
-
-
-                }
-            }
-        }
+    
     }
 }
