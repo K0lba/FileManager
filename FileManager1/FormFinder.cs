@@ -45,6 +45,7 @@ namespace FileManager1
                         foreach (Match match in matchCollection)
                         {
                             listBox1.Items.Add(currentdir.Name);
+                            
                         }
                     }
                 
@@ -128,36 +129,40 @@ namespace FileManager1
 
         private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            
-            textBox1.Text= textBox1.Text+"\\"+ listBox1.SelectedItem.ToString();
-            string newpath = path + "\\" + textBox1.Text;
-            if (File.Exists(newpath))
+            if (listBox1.SelectedItem != null)
             {
 
-                Process.Start(new ProcessStartInfo(newpath) { UseShellExecute = true });
-            }
-            else
-            {
-                listBox1.Items.Clear();
-            
-                DirectoryInfo DIR = new DirectoryInfo(newpath);
-                
-                DirectoryInfo[] DIRS = DIR.GetDirectories();
 
-                foreach (DirectoryInfo currentdir in DIRS)
+                textBox1.Text = textBox1.Text + "\\" + listBox1.SelectedItem.ToString();
+                string newpath = path + "\\" + textBox1.Text;
+                if (File.Exists(newpath))
                 {
-                    listBox1.Items.Add(currentdir.Name);
+
+                    Process.Start(new ProcessStartInfo(newpath) { UseShellExecute = true });
                 }
-
-                FileInfo[] FILES = DIR.GetFiles();
-
-                foreach (FileInfo file in FILES)
+                else if(Directory.Exists(newpath))
                 {
-                    listBox1.Items.Add(file.Name);
+                    listBox1.Items.Clear();
+
+                    DirectoryInfo DIR = new DirectoryInfo(newpath);
+
+                    DirectoryInfo[] DIRS = DIR.GetDirectories();
+
+                    foreach (DirectoryInfo currentdir in DIRS)
+                    {
+                        listBox1.Items.Add(currentdir.Name);
+                    }
+
+                    FileInfo[] FILES = DIR.GetFiles();
+
+                    foreach (FileInfo file in FILES)
+                    {
+                        listBox1.Items.Add(file.Name);
+
+                    }
+
 
                 }
-               
-
             }
         }
     }
