@@ -52,8 +52,7 @@ namespace FileManager1
                         MatchCollection matchCollection = regexText.Matches(line);
                         if (matchCollection.Count > 0)
                         {
-                            Parallel.ForEach(matchCollection, match=> { ListBoxAdd(line); });
-                            Thread.Sleep(500);
+                            listBox1.Items.Add(line);
                         }
                     }
                 }
@@ -63,6 +62,7 @@ namespace FileManager1
             Recursive(path);
                 void Recursive(string path)
                 {
+                    try { 
                     Parallel.ForEach(Directory.GetDirectories(path), curr =>
                     {
                         Regex regexText = new Regex(textBox1.Text);
@@ -74,9 +74,40 @@ namespace FileManager1
                     {
                         Regex regexF = new Regex(textBox1.Text);
                         MatchCollection temp = regexF.Matches(new DirectoryInfo(curr).Name);
-                        if (temp.Count > 0) { finded.Add(new DirectoryInfo(curr).Name); }
+                        if (temp.Count > 0) { 
+                            finded.Add(new DirectoryInfo(curr).Name); 
+                            
+                        }
+                        try { 
+                        using (StreamReader sr = new StreamReader(new DirectoryInfo(curr).FullName))
+                        {
+                            string line = "";
+                            Regex regexText = new Regex(textBox1.Text);
+                            while (line != null)
+                            {
+                                line = sr.ReadLine();
+                                if (line == null)
+                                {
+                                    continue;
+                                }
+                                MatchCollection matchCollection = regexText.Matches(line);
+                                if (matchCollection.Count > 0)
+                                {
+                                    finded.Add(line);
+                                }
+                            }
+                        }
+                        }
+                        catch
+                        {
 
+                        }
                     });
+                    }
+                    catch
+                    {
+
+                    }
                 
                 }
             }
